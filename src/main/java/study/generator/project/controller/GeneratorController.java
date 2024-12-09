@@ -1,23 +1,23 @@
 package study.generator.project.controller;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import study.generator.project.model.GeneratorDTO;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 
 @RestController
-public class HomeController {
+public class GeneratorController {
 
     @PostMapping("/")
-    public String hello(String modelName, Map<String, String> fields) {
+    public String Generator(@ModelAttribute GeneratorDTO model) {
         StringBuilder classBuilder = new StringBuilder();
-        classBuilder.append(String.format("public class %s {\n\n", modelName));
+        classBuilder.append(String.format("public class %s {\n\n", model.getModelName()));
 
-        fields.put("name", "String");
-
-        for (Map.Entry<String, String> entry : fields.entrySet()) {
+        for (Map.Entry<String, String> entry : model.getFields().entrySet()) {
             String fieldName = entry.getKey();
             String fieldType = entry.getValue();
 
@@ -38,7 +38,7 @@ public class HomeController {
 
         classBuilder.append("}\n");
 
-        try (FileWriter writer = new FileWriter("/Users/hyun/Workspace/class_generator/generated_file/"+modelName+".java")) {
+        try (FileWriter writer = new FileWriter("/Users/hyun/Workspace/class_generator/generated_file/"+model.getModelName()+".java")) {
             writer.write(classBuilder.toString());
         } catch (IOException e) {
             System.out.println("error: " + e.getMessage());
