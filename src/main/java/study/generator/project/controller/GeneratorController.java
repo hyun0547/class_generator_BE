@@ -1,8 +1,6 @@
 package study.generator.project.controller;
 
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import study.generator.project.model.GeneratorDTO;
 
 import java.io.FileWriter;
@@ -18,10 +16,15 @@ public class GeneratorController {
         classBuilder.append(String.format("public class %s {\n\n", model.getModelName()));
 
         for (Map.Entry<String, String> entry : model.getFields().entrySet()) {
-            String fieldName = entry.getKey();
             String fieldType = entry.getValue();
+            String fieldName = entry.getKey();
 
             classBuilder.append("    private ").append(fieldType).append(" ").append(fieldName).append(";\n");
+        }
+
+        for (Map.Entry<String, String> entry : model.getFields().entrySet()) {
+            String fieldType = entry.getValue();
+            String fieldName = entry.getKey();
 
             // Getter
             classBuilder.append("\n    public ").append(fieldType).append(" get")
