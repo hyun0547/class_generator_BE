@@ -3,6 +3,7 @@
 
 generated_file
 *.iml
+Dockerfile
 
 ### Eclipse ###
 .metadata
