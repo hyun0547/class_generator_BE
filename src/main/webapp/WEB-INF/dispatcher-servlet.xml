@@ -11,9 +11,12 @@
            http://www.springframework.org/schema/mvc
            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <!-- Spring MVC 설정 -->
     <mvc:annotation-driven />
 
-    <!-- REST API 컨트롤러 스캔 -->
-    <context:component-scan base-package="study.generator.project.controller" />
+    <context:component-scan base-package="study.generator.project" />
+
+    <context:property-placeholder location="classpath:application-dev.properties"/>
+
+<!--    <context:property-placeholder location="classpath:application-prod.properties"/>-->
+
 </beans>
