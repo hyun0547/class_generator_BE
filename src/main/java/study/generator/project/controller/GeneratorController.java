@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import study.generator.project.model.DBConnectionDTO;
 import study.generator.project.model.GeneratorDTO;
 import study.generator.project.service.GeneratorService;
 
@@ -17,8 +18,17 @@ public class GeneratorController {
     private GeneratorService generatorService;
 
     @PostMapping("/")
-    @CrossOrigin(origins = "http://localhost:8081")
-    public ResponseEntity<byte[]> Generator(@ModelAttribute GeneratorDTO model) {
+    @CrossOrigin("http://localhost:8081")
+    public ResponseEntity<byte[]> Generator(@ModelAttribute GeneratorDTO model, @ModelAttribute DBConnectionDTO dbConnection){
+
+//      create table
+        try {
+            generatorService.createTable(model, dbConnection);
+        } catch (Exception e){
+            System.out.println(e.getCause());
+        }
+
+//      create class
         StringBuilder classBuilder = new StringBuilder();
         classBuilder.append(String.format("public class %s {\n\n", model.getModelName()));
 
@@ -47,12 +57,6 @@ public class GeneratorController {
         }
 
         classBuilder.append("}\n");
-
-//        try (FileWriter writer = new FileWriter("/Users/hyun/Workspace/class_generator/generated_file/"+model.getModelName()+".java")) {
-//            writer.write(classBuilder.toString());
-//        } catch (IOException e) {
-//            System.out.println("error: " + e.getMessage());
-//        }
 
         byte[] classBytes = classBuilder.toString().getBytes();
 
